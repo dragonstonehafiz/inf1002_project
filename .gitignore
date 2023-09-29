@@ -5,3 +5,4 @@
 .idea/modules.xml
 text_analyzer/test_data_keyword_gen1.csv
 text_analyzer/test_data_keyword_gen2.csv
+.idea/vcs.xml
