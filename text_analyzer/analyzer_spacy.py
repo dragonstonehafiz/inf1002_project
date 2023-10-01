@@ -33,16 +33,17 @@ class SpacyHandler:
         self.nlp = spacy.load(to_load)
 
     def create_list_of_words(self,
-                             to_include: str,
                              text_list: list[str],
+                             to_include: str = "",
                              repeat: bool = True) -> list[str]:
         """
         pulls words from a list of strings whose part of speech tags are in the pos_tags_to_include list
         :param text_list: a list of strings
         :param repeat: True = add text to output list even if they are already in the list
-        :param to_include: a string of word types you want to pull separated by commas.
-        e.g. "ADJ,ADV,NOUN,VERB" pulls adjectives, adverbs, nouns and verbs
-        Full list of pos tags can be found in analyzer_spacy.py
+        :param to_include: a string of word types you want to pull separated by commas.\n
+        e.g. "ADJ,ADV,NOUN,VERB" pulls adjectives, adverbs, nouns and verbs\n
+        if pos_tags == "" include all text found
+        Full list of pos tags can be found in analyzer_spacy.py\n
         :return: returns words as a list of strings
         """
         list_of_words = []
@@ -53,7 +54,8 @@ class SpacyHandler:
             tokens = self.nlp(word_lower)
             for token in tokens:
                 # check if the current word should be included in the output list
-                if token.pos_ in pos_tags_to_include:
+                # if the
+                if to_include == "" or token.pos_ in pos_tags_to_include:
                     try:
                         text = token.text
                         # if the word is not in the list, OR you want to repeat
