@@ -1,10 +1,10 @@
-# pip install -U pip setuptools wheel
-# pip install -U spacy
 # python -m spacy download en_core_web_sm
 import spacy
-# import tqdm
 # for progress bar
 from tqdm import tqdm
+
+import sys
+
 
 """ POS TAGS
 ADJ: Adjective (e.g., "big," "red").
@@ -30,7 +30,13 @@ X: Other (e.g., "xfm," "zzz").
 
 class SpacyHandler:
     def __init__(self, to_load="en_core_web_md"):
-        self.nlp = spacy.load(to_load)
+        try:
+            self.nlp = spacy.load(to_load)
+        except OSError:
+            print(f"{to_load} is not installed.\n"
+                  f"Please install it using 'python -m spacy download {to_load}'\n"
+                  f"This is necessary for keyword generation.")
+            sys.exit()
 
     def create_list_of_words(self,
                              text_list: list[str],
@@ -43,7 +49,7 @@ class SpacyHandler:
         :param to_include: a string of word types you want to pull separated by commas.\n
         e.g. "ADJ,ADV,NOUN,VERB" pulls adjectives, adverbs, nouns and verbs\n
         if pos_tags == "" include all text found
-        Full list of pos tags can be found in analyzer_spacy.py\n
+        Full list of pos tags can be found in class_SpacyHandler.py\n
         :return: returns words as a list of strings
         """
         list_of_words = []
@@ -65,17 +71,6 @@ class SpacyHandler:
                         print(e, token)
         return list_of_words
 
-    def load(self, to_load: str = "en_core_web_md"):
-        """
-        loads the spacy model you want to use
-        to install use "python -m spacy download en_core_web_md" in terminal
-        "en_core_web_md" can be changed to different sized models
-        en_core_web_sm - small sized model. Efficient but not as accurate
-        en_core_web_md - medium-sized model. More accurate than the small sized model
-        en_core_web_lg - large sized model. Most accurate, but close to 1gb in size
-        :param to_load: the name of the model you want to load
-        """
-        self.nlp = spacy.load(to_load)
 
     def create_list_of_verbs_lemma(self, text_list: list[str], repeat: bool = True) -> list[str]:
         """

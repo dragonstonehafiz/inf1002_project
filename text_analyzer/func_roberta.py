@@ -1,6 +1,3 @@
-import pandas as pd
-# for sentiment analysis using vader method
-from nltk.sentiment import SentimentIntensityAnalyzer
 # for sentiment analysis using roberta method
 # import transformers
 from transformers import AutoTokenizer
@@ -12,7 +9,7 @@ from scipy.special import softmax
 from tqdm import tqdm
 
 
-def polarity_scores_roberta(text: str, tokenizer: object, model: object) -> dict:
+def polarity_scores_roberta(text: str, tokenizer, model) -> dict:
     """
     find the polarity score of a text using RoBERTa pretrained model
     {"roberta_neg", "roberta_neu", "roberta_pos"} all values in this are from zero to one and all three add together
@@ -36,14 +33,16 @@ def polarity_scores_roberta(text: str, tokenizer: object, model: object) -> dict
     return scores_dict
 
 
-def sentiment_analyzer_roberta(comment_list: list[str], id_list: list[str]) -> object:
+def generate_sentiment_with_id(comment_list: list[str], id_list: list[str], id_col_name: str = "id") -> list[dict]:
     """
     creates a list of dictionaries that tracks a comments polarity scores \n
+    this dictionary will contain the text's id \n
     dictionary structure: {"id"," roberta_neg", "roberta_neu", "roberta_pos"} \n
     this function includes a list of ids, so I can merge the output with the original data
     :param comment_list: list of strings of the comments
     :param id_list: list of strings of the comment ids
-    :return: returns a dataframe with columns: id, roberta_neg, roberta_neu, roberta_pos
+    :param id_col_name: the name of the column that will store item ids
+    :return: returns a list containing dictionaries
     """
     # Found on
     # https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment
@@ -55,7 +54,7 @@ def sentiment_analyzer_roberta(comment_list: list[str], id_list: list[str]) -> o
         try:
             text = comment_list[i]
             comment_id = id_list[i]
-            result = {**{'id': comment_id}, **polarity_scores_roberta(text, tokenizer, model)}
+            result = {**{id_col_name: comment_id}, **polarity_scores_roberta(text, tokenizer, model)}
             output_list.append(result)
         except Exception as e:
             print(f"{comment_id} unable to be analyzed.\n"
@@ -66,4 +65,7 @@ def sentiment_analyzer_roberta(comment_list: list[str], id_list: list[str]) -> o
             result = {'id': comment_id, "roberta_neg": -1, "roberta_neu": -1, "roberta_pos": -1}
             output_list.append(result)
     return output_list
+
+
+
 
