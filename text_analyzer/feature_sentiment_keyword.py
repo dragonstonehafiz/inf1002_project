@@ -1,3 +1,6 @@
+from nltk.sentiment import SentimentIntensityAnalyzer
+import nltk
+
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 from tqdm import tqdm
@@ -7,7 +10,32 @@ from class_SpacyHandler import SpacyHandler
 from func_roberta import polarity_scores_roberta
 from func_keyword_gen import generate_keywords_using_tokens
 
+# Download the VADER lexicon if not already downloaded
+nltk.download("vader_lexicon")
+# initialize spacyHandler
 spacy_handler = SpacyHandler()
+
+
+def sentiment_analyzer_vader(comment_list: list[str]) -> list[dict]:
+    """
+    generates sentiment using vaders bag of words
+    :param comment_list: a list of strings of all the text you want analyzed
+    :return: a list of dictionaries containing polarity scores of each review
+    """
+    sia = SentimentIntensityAnalyzer()
+    list_of_results = []
+    for i in tqdm(range(len(comment_list)), desc=f"Analyzing Comments (VADER)"):
+        text = comment_list[i]
+        result = sia.polarity_scores(text)
+        # creates a new dictionary to rename the keys in the results to vader_pos, _neg, _neu
+        to_add = {
+            "vader_neg": result['neg'],
+            "vader_neu": result['neu'],
+            "vader_pos": result['pos'],
+            "vader_compound": result['compound']
+        }
+        list_of_results.append(to_add)
+    return list_of_results
 
 
 def generate_sentiment(comment_list: list[str]) -> list[dict]:

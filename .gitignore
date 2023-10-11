@@ -11,3 +11,4 @@ text_analyzer/.ipynb_checkpoints/test_data_sentiment_output-checkpoint.csv
 text_analyzer/__pycache__/analyzer_keyword_gen.cpython-311.pyc
 text_analyzer/__pycache__/analyzer_spacy.cpython-311.pyc
 text_analyzer/shoeDataOutput.csv
+vader_roberta_comparison/.ipynb_checkpoints/Roberta Vader Comparison-checkpoint.ipynb
