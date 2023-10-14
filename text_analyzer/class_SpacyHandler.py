@@ -71,7 +71,6 @@ class SpacyHandler:
                         print(e, token)
         return list_of_words
 
-
     def create_list_of_verbs_lemma(self, text_list: list[str], repeat: bool = True) -> list[str]:
         """
         creates a list of strings that represent verbs that appeared in the text then converts them into dictionary form

@@ -48,8 +48,8 @@ def generate_sentiment(comment_list: list[str]) -> list[dict]:
     :return: returns a list containing dictionaries
     """
     # Found on
-    # https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment
-    MODEL = f"cardiffnlp/twitter-roberta-base-sentiment"
+    # https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest
+    MODEL = f"cardiffnlp/twitter-roberta-base-sentiment-latest"
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
     try:
         model = AutoModelForSequenceClassification.from_pretrained(MODEL)
