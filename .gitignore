@@ -15,3 +15,4 @@ vader_roberta_comparison/.ipynb_checkpoints/Roberta Vader Comparison-checkpoint.
 text_analyzer/shoeDataCombined.csv
 text_analyzer/test_data_originalCombined.csv
 text_analyzer/test_data_originalOutput.csv
+text_analyzer/overallShoeData_CLEANED.xlsx

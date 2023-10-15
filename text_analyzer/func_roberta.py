@@ -1,11 +1,6 @@
-# for sentiment analysis using roberta method
-# import transformers
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
-# import scipy
 from scipy.special import softmax
-# import tqdm
-# for progress bar
 from tqdm import tqdm
 
 

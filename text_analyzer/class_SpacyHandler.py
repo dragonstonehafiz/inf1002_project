@@ -1,9 +1,6 @@
-# python -m spacy download en_core_web_sm
 import spacy
-# for progress bar
 from tqdm import tqdm
-
-import sys
+import subprocess
 
 
 """ POS TAGS
@@ -30,13 +27,15 @@ X: Other (e.g., "xfm," "zzz").
 
 class SpacyHandler:
     def __init__(self, to_load="en_core_web_md"):
-        try:
-            self.nlp = spacy.load(to_load)
-        except OSError:
-            print(f"{to_load} is not installed.\n"
-                  f"Please install it using 'python -m spacy download {to_load}'\n"
-                  f"This is necessary for keyword generation.")
-            sys.exit()
+        while True:
+            try:
+                self.nlp = spacy.load(to_load)
+                break
+            except OSError:
+                # print(f"{to_load} is not installed.\n"
+                #       f"Please install it using 'python -m spacy download {to_load}'\n"
+                #       f"This is necessary for keyword generation.")
+                subprocess.run(f"python -m spacy download {to_load}", shell=True, check=True)
 
     def create_list_of_words(self,
                              text_list: list[str],

@@ -1,6 +1,3 @@
-from nltk.sentiment import SentimentIntensityAnalyzer
-import nltk
-
 from transformers import AutoTokenizer
 from transformers import AutoModelForSequenceClassification
 from tqdm import tqdm
@@ -10,32 +7,7 @@ from class_SpacyHandler import SpacyHandler
 from func_roberta import polarity_scores_roberta
 from func_keyword_gen import generate_keywords_using_tokens
 
-# Download the VADER lexicon if not already downloaded
-nltk.download("vader_lexicon")
-# initialize spacyHandler
 spacy_handler = SpacyHandler()
-
-
-def sentiment_analyzer_vader(comment_list: list[str]) -> list[dict]:
-    """
-    generates sentiment using vaders bag of words
-    :param comment_list: a list of strings of all the text you want analyzed
-    :return: a list of dictionaries containing polarity scores of each review
-    """
-    sia = SentimentIntensityAnalyzer()
-    list_of_results = []
-    for i in tqdm(range(len(comment_list)), desc=f"Analyzing Comments (VADER)"):
-        text = comment_list[i]
-        result = sia.polarity_scores(text)
-        # creates a new dictionary to rename the keys in the results to vader_pos, _neg, _neu
-        to_add = {
-            "vader_neg": result['neg'],
-            "vader_neu": result['neu'],
-            "vader_pos": result['pos'],
-            "vader_compound": result['compound']
-        }
-        list_of_results.append(to_add)
-    return list_of_results
 
 
 def generate_sentiment(comment_list: list[str]) -> list[dict]:
@@ -131,3 +103,27 @@ def generate_keywords_nouns(text_list: list[str], keyword_amount: int) -> dict:
                                                    repeat=True)
     keywords = generate_keywords_using_tokens(word_list, keyword_amount)
     return keywords
+
+
+def generate_list_of_words(text_list: list[str]) -> list[str]:
+    """
+    returns a list of words from a given text, including every appearance of each word
+    :param text_list: the list of text you want to pull words from
+    :return: a list of all words in that appeared in the text (including repeated appearances)
+    """
+    word_list = spacy_handler.create_list_of_words(to_include="",
+                                                   text_list=text_list,
+                                                   repeat=True)
+    return word_list
+
+
+def generate_list_of_adjectives(text_list: list[str]) -> list[str]:
+    """
+    returns a list of adjectives from a given text, including every appearance of each word
+    :param text_list: the list of text you want to pull words from
+    :return: a list of all adjectives in that appeared in the text (including repeated appearances)
+    """
+    word_list = spacy_handler.create_list_of_words(to_include="ADJ",
+                                                   text_list=text_list,
+                                                   repeat=True)
+    return word_list

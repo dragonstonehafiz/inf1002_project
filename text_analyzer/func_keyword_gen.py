@@ -2,8 +2,6 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.probability import FreqDist
 
-nltk.download("stopwords")
-
 
 def generate_keywords_using_tokens(token_list: list, keyword_amount: int = 10) -> dict[str, int]:
     """
@@ -14,10 +12,12 @@ def generate_keywords_using_tokens(token_list: list, keyword_amount: int = 10) -
     :param keyword_amount: how many keywords you want to get back
     :return: a dictionary with the most frequent words
     """
+    nltk.download("stopwords")
     stop_words = set(stopwords.words('english'))
     # removes numbers and stop words
     token_list = [token for token in token_list if token.isalnum() and token not in stop_words]
 
+    # create a list of tuples with each word sorted in descending order using frequency of appearances
     freq_tup = FreqDist(token_list).most_common(keyword_amount)
 
     # converts the tuple into a dictionary
@@ -27,4 +27,5 @@ def generate_keywords_using_tokens(token_list: list, keyword_amount: int = 10) -
         freq = tup[1]
         output_dict[word] = freq
     return output_dict
+
 
