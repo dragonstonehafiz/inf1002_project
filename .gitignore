@@ -16,3 +16,5 @@ text_analyzer/shoeDataCombined.csv
 text_analyzer/test_data_originalCombined.csv
 text_analyzer/test_data_originalOutput.csv
 text_analyzer/overallShoeData_CLEANED.xlsx
+text_analyzer/overallShoeData.csv
+text_analyzer/overallShoeDataOutput.csv

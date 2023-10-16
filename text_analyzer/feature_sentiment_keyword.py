@@ -127,3 +127,50 @@ def generate_list_of_adjectives(text_list: list[str]) -> list[str]:
                                                    text_list=text_list,
                                                    repeat=True)
     return word_list
+
+
+def generate_average_polarity_scores(name_list: list[str],
+                                     neg_list: list[float],
+                                     neu_list: list[float],
+                                     pos_list: list[float]) -> list[dict]:
+    """
+    generate averages of polarity scores separated by types of shoes
+    :param name_list: a list of strings with the names of all entries
+    :param neg_list: a list of floats with the negative scores of all entries
+    :param neu_list: a list of floats with the neutral scores of all entries
+    :param pos_list: a list of floats with the positive scores of all entries
+    :return: returns a list with dictionaries of polarity scores
+    dictionary structure = {"Shoe Name", "Roberta Negative", "Roberta Neutral", "Roberta Positive"}
+    """
+    # This loop is to generate the sum of all values in for each polarity score
+    sum_dict = {}
+    for i in range(0, len(name_list)):
+        shoe_name = name_list[i]
+        neg_score = neg_list[i]
+        neu_score = neu_list[i]
+        pos_score = pos_list[i]
+        # checks the dictionary to see if there is a key tracking the current shoe
+        shoe_data_list = sum_dict.get(shoe_name)
+        if shoe_data_list is None:
+            # since the map doesn't already have a list tracking scores, we have to initialize a new list
+            # index = 3 is total number of entries
+            sum_dict[shoe_name] = [neg_score, neu_score, pos_score, 1]
+        else:
+            # since the map already has a list, add new data to list
+            shoe_data_list[0] += neg_score
+            shoe_data_list[1] += neu_score
+            shoe_data_list[2] += pos_score
+            shoe_data_list[3] += 1
+    # calculate the average for each polarity score for each unique shoe
+    output_list = []
+    # key value pair, just renamed them for clarity
+    for shoe_name, polarity_scores in sum_dict.items():
+        new_dict = {
+            "Shoe Name": shoe_name,
+            "Roberta Negative": polarity_scores[0]/polarity_scores[3],
+            "Roberta Neutral": polarity_scores[1]/polarity_scores[3],
+            "Roberta Positive": polarity_scores[2]/polarity_scores[3]
+        }
+        output_list.append(new_dict)
+
+    return output_list
